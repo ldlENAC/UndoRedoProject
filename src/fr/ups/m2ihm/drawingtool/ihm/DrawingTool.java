@@ -17,16 +17,22 @@ import static fr.ups.m2ihm.drawingtool.model.PaletteEventType.DRAW_UNDO_REGIONAL
 import fr.ups.m2ihm.drawingtool.model.core.Line;
 import fr.ups.m2ihm.drawingtool.model.core.Rectangle;
 import fr.ups.m2ihm.drawingtool.model.core.Shape;
+import fr.ups.m2ihm.drawingtool.undomanager.Command;
 import fr.ups.m2ihm.drawingtool.undomanager.UndoManager;
 import java.awt.Color;
 import static java.awt.Color.green;
 import static java.awt.Color.pink;
 import static java.awt.Cursor.getDefaultCursor;
 import static java.awt.Cursor.getPredefinedCursor;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import static java.awt.event.KeyEvent.VK_ESCAPE;
 import java.beans.PropertyChangeEvent;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+import javax.swing.JMenuItem;
 
 /**
  *
@@ -106,6 +112,10 @@ public class DrawingTool extends javax.swing.JFrame {
         model.addPropertyListener(DRAW_UNDO_REGIONAL.getPropertyName(), (PropertyChangeEvent evt) -> {
             undoRegionalButton.setEnabled((Boolean) evt.getNewValue());
         });
+        
+        model.addPropertyListener(UndoManager.UNDO_COMMANDS_PROPERTY, (e) -> { 
+            populateHistoryMenu(e);
+        });
 
         model.init();
 
@@ -129,6 +139,7 @@ public class DrawingTool extends javax.swing.JFrame {
         jMenu2 = new javax.swing.JMenu();
         menuUndo = new javax.swing.JMenuItem();
         menuRedo = new javax.swing.JMenuItem();
+        historyMenu = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -230,6 +241,9 @@ public class DrawingTool extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu2);
 
+        historyMenu.setText("History");
+        jMenuBar1.add(historyMenu);
+
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -305,6 +319,7 @@ public class DrawingTool extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnLine;
     private javax.swing.JButton btnRectangle;
+    private javax.swing.JMenu historyMenu;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
@@ -313,4 +328,36 @@ public class DrawingTool extends javax.swing.JFrame {
     private javax.swing.JButton undoRegionalButton;
     private fr.ups.m2ihm.drawingtool.ihm.WhiteBoardPanel whiteBoardPanel;
     // End of variables declaration//GEN-END:variables
+
+    private void populateHistoryMenu(PropertyChangeEvent e) {
+        List<Command> allCommands = new ArrayList<>();
+        if (e.getPropertyName().equals(UndoManager.UNDO_COMMANDS_PROPERTY)){
+            Collection<Command> undoables = (Collection<Command>)e.getNewValue();
+            if (!undoables.isEmpty()){
+                allCommands.addAll(undoables);
+            }
+        }
+        
+        historyMenu.removeAll();
+        for (int i = 0; i<allCommands.size(); i++){
+            final int index = i;
+            Command c = allCommands.get(i);
+            JMenuItem item = new JMenuItem();
+            item.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    onItemHistoryMenuClicked(e, index);
+                }                
+            });
+            
+            item.setText(i + " - Cancel " + c.getShape().getClass().getSimpleName() + " Creation");
+            historyMenu.add(item);
+            
+        }
+    }
+
+
+    private void onItemHistoryMenuClicked(ActionEvent e, int index){
+        model.undoToCommand(index);
+    };
 }

@@ -34,6 +34,11 @@ public class DefaultDrawingToolModel implements DrawingToolModel {
         undoManager.redo();
     }
 
+    @Override
+    public void undoToCommand(int index) {
+        undoManager.undoToCommand(index);
+    }
+
     private enum PossibleState {
 
         DRAWING_LINE(false, true, true),

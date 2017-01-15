@@ -36,6 +36,13 @@ public class UndoManager {
         return PossibleState.REDO_ONLY.equals(currentState) || PossibleState.UNDO_REDOABLE.equals(currentState);
     }
 
+    public void undoToCommand(int index) {
+        int numberOfUndo = undoableCommands.search(undoableCommands.get(index)); // TODO simpler formula
+        for (int i=0; i<numberOfUndo; i++){
+            undo();
+        }
+    }
+
     private enum PossibleState {
 
         IDLE, UNDO_ONLY, REDO_ONLY, UNDO_REDOABLE
