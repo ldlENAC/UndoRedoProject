@@ -12,6 +12,7 @@ import static fr.ups.m2ihm.drawingtool.model.DrawingEventType.END_DRAW;
 import static fr.ups.m2ihm.drawingtool.model.DrawingStateMachine.GHOST_PROPERTY;
 import static fr.ups.m2ihm.drawingtool.model.DrawingStateMachine.SHAPES_PROPERTY;
 import static fr.ups.m2ihm.drawingtool.model.PaletteEventType.DRAW_LINE;
+import static fr.ups.m2ihm.drawingtool.model.PaletteEventType.DRAW_MACRO;
 import static fr.ups.m2ihm.drawingtool.model.PaletteEventType.DRAW_RECTANGLE;
 import static fr.ups.m2ihm.drawingtool.model.PaletteEventType.DRAW_UNDO_REGIONAL;
 import fr.ups.m2ihm.drawingtool.model.core.Line;
@@ -113,6 +114,10 @@ public class DrawingTool extends javax.swing.JFrame {
             undoRegionalButton.setEnabled((Boolean) evt.getNewValue());
         });
         
+        model.addPropertyListener(DRAW_MACRO.getPropertyName(), (PropertyChangeEvent evt) -> {
+            btnMacro.setEnabled((Boolean) evt.getNewValue());
+        });
+        
         model.addPropertyListener(UndoManager.UNDO_COMMANDS_PROPERTY, (e) -> { 
             populateHistoryMenu(e);
         });
@@ -134,6 +139,7 @@ public class DrawingTool extends javax.swing.JFrame {
         btnLine = new javax.swing.JButton();
         btnRectangle = new javax.swing.JButton();
         undoRegionalButton = new javax.swing.JButton();
+        btnMacro = new javax.swing.JButton();
         whiteBoardPanel = new fr.ups.m2ihm.drawingtool.ihm.WhiteBoardPanel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu2 = new javax.swing.JMenu();
@@ -164,6 +170,13 @@ public class DrawingTool extends javax.swing.JFrame {
             }
         });
 
+        btnMacro.setText("Record Macro");
+        btnMacro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMacroActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -173,7 +186,8 @@ public class DrawingTool extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnLine, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnRectangle, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(undoRegionalButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(undoRegionalButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnMacro, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -185,6 +199,8 @@ public class DrawingTool extends javax.swing.JFrame {
                 .addComponent(btnRectangle)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(undoRegionalButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnMacro)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -260,7 +276,7 @@ public class DrawingTool extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 162, Short.MAX_VALUE))
+                .addGap(0, 133, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(whiteBoardPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -315,9 +331,15 @@ public class DrawingTool extends javax.swing.JFrame {
         model.handleEvent(event);
     }//GEN-LAST:event_undoRegionalButtonActionPerformed
 
+    private void btnMacroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMacroActionPerformed
+        PaletteEvent event = new PaletteEvent(DRAW_MACRO);
+        model.handleEvent(event);
+    }//GEN-LAST:event_btnMacroActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnLine;
+    private javax.swing.JButton btnMacro;
     private javax.swing.JButton btnRectangle;
     private javax.swing.JMenu historyMenu;
     private javax.swing.JMenu jMenu2;

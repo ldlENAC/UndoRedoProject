@@ -76,7 +76,7 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="0" pref="162" max="32767" attributes="0"/>
+              <EmptySpace min="0" pref="133" max="32767" attributes="0"/>
           </Group>
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
@@ -98,6 +98,7 @@
                       <Component id="btnLine" max="32767" attributes="0"/>
                       <Component id="btnRectangle" max="32767" attributes="0"/>
                       <Component id="undoRegionalButton" alignment="0" max="32767" attributes="0"/>
+                      <Component id="btnMacro" alignment="0" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -112,6 +113,8 @@
                   <Component id="btnRectangle" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="undoRegionalButton" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="btnMacro" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
@@ -140,6 +143,14 @@
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="undoRegionalButtonActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="btnMacro">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Record Macro"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnMacroActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>
