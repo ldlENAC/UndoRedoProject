@@ -38,6 +38,11 @@
             <Property name="text" type="java.lang.String" value="History"/>
           </Properties>
         </Menu>
+        <Menu class="javax.swing.JMenu" name="MacrosMenu">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Macros"/>
+          </Properties>
+        </Menu>
       </SubComponents>
     </Menu>
   </NonVisualComponents>

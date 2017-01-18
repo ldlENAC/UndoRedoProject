@@ -19,6 +19,7 @@ import fr.ups.m2ihm.drawingtool.model.core.Line;
 import fr.ups.m2ihm.drawingtool.model.core.Rectangle;
 import fr.ups.m2ihm.drawingtool.model.core.Shape;
 import fr.ups.m2ihm.drawingtool.undomanager.Command;
+import fr.ups.m2ihm.drawingtool.undomanager.Macro;
 import fr.ups.m2ihm.drawingtool.undomanager.UndoManager;
 import java.awt.Color;
 import static java.awt.Color.green;
@@ -121,6 +122,10 @@ public class DrawingTool extends javax.swing.JFrame {
         model.addPropertyListener(UndoManager.UNDO_COMMANDS_PROPERTY, (e) -> { 
             populateHistoryMenu(e);
         });
+        
+        model.addPropertyListener(UndoManager.MACRO_PROPERTY, (e) -> { 
+            populateMacrosMenu(e);
+        });
 
         model.init();
 
@@ -146,6 +151,7 @@ public class DrawingTool extends javax.swing.JFrame {
         menuUndo = new javax.swing.JMenuItem();
         menuRedo = new javax.swing.JMenuItem();
         historyMenu = new javax.swing.JMenu();
+        MacrosMenu = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -260,6 +266,9 @@ public class DrawingTool extends javax.swing.JFrame {
         historyMenu.setText("History");
         jMenuBar1.add(historyMenu);
 
+        MacrosMenu.setText("Macros");
+        jMenuBar1.add(MacrosMenu);
+
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -338,6 +347,7 @@ public class DrawingTool extends javax.swing.JFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenu MacrosMenu;
     private javax.swing.JButton btnLine;
     private javax.swing.JButton btnMacro;
     private javax.swing.JButton btnRectangle;
@@ -365,11 +375,8 @@ public class DrawingTool extends javax.swing.JFrame {
             final int index = i;
             Command c = allCommands.get(i);
             JMenuItem item = new JMenuItem();
-            item.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    onItemHistoryMenuClicked(e, index);
-                }                
+            item.addActionListener((ActionEvent e1) -> {
+                onItemHistoryMenuClicked(e1, index);                
             });
             
             item.setText(i + " - Cancel " + c.getShape().getClass().getSimpleName() + " Creation");
@@ -382,4 +389,32 @@ public class DrawingTool extends javax.swing.JFrame {
     private void onItemHistoryMenuClicked(ActionEvent e, int index){
         model.undoToCommand(index);
     };
+    
+    private void populateMacrosMenu(PropertyChangeEvent e){
+        List<Macro> myMacros;
+        myMacros = new ArrayList<>();
+        if (e.getPropertyName().equals(UndoManager.MACRO_PROPERTY)){
+            Collection<Macro> macroArray = (Collection<Macro>)e.getNewValue();
+            if (!macroArray.isEmpty()){
+                myMacros.addAll(macroArray);
+            }
+        }
+        
+        MacrosMenu.removeAll();
+        for (int i = 0; i<myMacros.size(); i++){
+            final int index = i;
+            Macro m = myMacros.get(i);
+            JMenuItem item = new JMenuItem();
+            item.addActionListener((ActionEvent e1) -> {
+                onItemMacroMenuClicked(e1, index);                
+            });
+            
+            item.setText(i + " - " + m.toString());
+            MacrosMenu.add(item);            
+        }
+    }
+    
+    private void onItemMacroMenuClicked(ActionEvent e, int index){
+        model.executeMacro(index);        
+    }
 }

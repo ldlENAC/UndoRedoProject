@@ -96,7 +96,7 @@ public class MacroStateMachine implements DrawingStateMachine {
                 Rectangle oldGhost = ghost;
                 ghost = null;
                 
-                undoManager.undoRegionalProcess(oldGhost);
+                undoManager.recordMacro(oldGhost);
 
                //core.createShape(oldGhost);
 //                Command com = new CreateShapeCommand(core, oldGhost);

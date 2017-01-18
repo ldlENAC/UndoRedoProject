@@ -41,6 +41,11 @@ public class DefaultDrawingToolModel implements DrawingToolModel {
         undoManager.undoToCommand(index);
     }
 
+    @Override
+    public void executeMacro(int index) {
+        undoManager.executeMacro(index);
+    }
+
     private enum PossibleState {
 
         DRAWING_LINE(false, true, true, true),

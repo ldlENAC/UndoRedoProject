@@ -9,8 +9,10 @@ import fr.ups.m2ihm.drawingtool.model.core.Shape;
 import java.awt.Point;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
@@ -23,10 +25,12 @@ public class UndoManager {
     public final static String REGISTER_AVAILABLE_PROPERTY = "registerAvailable";
     public final static String UNDO_COMMANDS_PROPERTY = "undo";
     public final static String REDO_COMMANDS_PROPERTY = "redo";
+    public final static String MACRO_PROPERTY = "macro";
     private final PropertyChangeSupport support;
     private final Map<String, Boolean> eventAvailability;
     private final Stack<Command> undoableCommands;
     private final Stack<Command> redoableCommands;
+    private final List<Macro> macros;
 
     public Boolean isUndoEnabled() {
         return PossibleState.UNDO_ONLY.equals(currentState) || PossibleState.UNDO_REDOABLE.equals(currentState);
@@ -41,8 +45,9 @@ public class UndoManager {
         for (int i=0; i<numberOfUndo; i++){
             undo();
         }
-    }
+    }    
 
+    
     private enum PossibleState {
 
         IDLE, UNDO_ONLY, REDO_ONLY, UNDO_REDOABLE
@@ -71,11 +76,13 @@ public class UndoManager {
         gotoState(PossibleState.IDLE);
         firePropertyChange(UNDO_COMMANDS_PROPERTY, null, Collections.unmodifiableList(undoableCommands));
         firePropertyChange(REDO_COMMANDS_PROPERTY, null, Collections.unmodifiableList(redoableCommands));
+        firePropertyChange(MACRO_PROPERTY, null, Collections.unmodifiableList(macros));
     }
 
     public UndoManager() {
         undoableCommands = new Stack<>();
         redoableCommands = new Stack<>();
+        macros = new ArrayList<>();
         support = new PropertyChangeSupport(this);
         eventAvailability = new HashMap<>();
         eventAvailability.put(REGISTER_AVAILABLE_PROPERTY, null);
@@ -83,6 +90,7 @@ public class UndoManager {
         eventAvailability.put(UndoEvent.REDO.getPropertyName(), null);
         eventAvailability.put(UNDO_COMMANDS_PROPERTY, null);
         eventAvailability.put(REDO_COMMANDS_PROPERTY, null);
+        eventAvailability.put(MACRO_PROPERTY, true);
     }
 
     public void registerCommand(Command command) {
@@ -217,7 +225,6 @@ public class UndoManager {
         fireEventAvailabilityChanged(REGISTER_AVAILABLE_PROPERTY, registerEnabled);
         fireEventAvailabilityChanged(UndoEvent.UNDO.getPropertyName(), undoEnabled);
         fireEventAvailabilityChanged(UndoEvent.REDO.getPropertyName(), redoEnabled);
-
     }
 
     private void fireEventAvailabilityChanged(String propertyName, boolean newAvailability) {
@@ -279,4 +286,23 @@ public class UndoManager {
             }
         }
     }
+    
+    public void recordMacro(Rectangle selection) {
+        List<Command> commandsMacro = new ArrayList<>();
+        
+        for (int i=0; i<undoableCommands.size(); i++) {
+            Command command = undoableCommands.get(i);
+            if (isInSelection(command.getShape(), selection)){
+                commandsMacro.add(command);
+            }
+        }
+        
+        //ArrayList<Macro> oldMacros = new ArrayList<>(macros);
+        macros.add(new Macro(commandsMacro));
+        firePropertyChange(MACRO_PROPERTY, null, macros);        
+    }
+    
+    public void executeMacro(int index) {
+        macros.get(index).execute();
+    }    
 }
