@@ -44,6 +44,7 @@ public class DefaultDrawingToolModel implements DrawingToolModel {
     @Override
     public void executeMacro(int index) {
         undoManager.executeMacro(index);
+        firePropertyChange(DEFAULT_LINE_STATE_MACHINE.SHAPES_PROPERTY, null, core.getShapes());
     }
 
     private enum PossibleState {
@@ -100,6 +101,10 @@ public class DefaultDrawingToolModel implements DrawingToolModel {
 
         undoManager.addPropertyChangeListener(UndoManager.UNDO_COMMANDS_PROPERTY, (e) -> {
             firePropertyChange(UndoManager.UNDO_COMMANDS_PROPERTY, e.getOldValue(), e.getNewValue());
+        });
+        
+        undoManager.addPropertyChangeListener(UndoManager.MACRO_PROPERTY, (e) -> {  //added for macro
+            firePropertyChange(UndoManager.MACRO_PROPERTY, e.getOldValue(), e.getNewValue());
         });
 
         undoManager.addPropertyChangeListener(UndoManager.REDO_COMMANDS_PROPERTY, (e) -> {

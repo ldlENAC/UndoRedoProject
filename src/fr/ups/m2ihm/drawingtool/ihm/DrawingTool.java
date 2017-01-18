@@ -410,7 +410,8 @@ public class DrawingTool extends javax.swing.JFrame {
             });
             
             item.setText(i + " - " + m.toString());
-            MacrosMenu.add(item);            
+            MacrosMenu.add(item);      
+            
         }
     }
     
