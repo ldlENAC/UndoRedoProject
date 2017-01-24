@@ -60,5 +60,10 @@ public class Line implements Shape {
         return destination;
     }
 
+    @Override
+    public void translate(int dx, int dy) {
+        this.source.translate(dx, dy);
+    }
+
 
 }

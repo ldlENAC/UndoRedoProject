@@ -32,13 +32,13 @@ public class Rectangle implements Shape{
         return true;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 5;
-        hash = 97 * hash + (this.upperLeftCorner != null ? this.upperLeftCorner.hashCode() : 0);
-        hash = 97 * hash + (this.lowerRightCorner != null ? this.lowerRightCorner.hashCode() : 0);
-        return hash;
-    }
+//    @Override
+//    public int hashCode() {
+//        int hash = 5;
+//        hash = 97 * hash + (this.upperLeftCorner != null ? this.upperLeftCorner.hashCode() : 0);
+//        hash = 97 * hash + (this.lowerRightCorner != null ? this.lowerRightCorner.hashCode() : 0);
+//        return hash;
+//    }
 
     @Override
     public String toString() {
@@ -53,6 +53,11 @@ public class Rectangle implements Shape{
     @Override
     public Point getLowerRightCorner() {
         return lowerRightCorner;
+    }
+
+    @Override
+    public void translate(int dx, int dy) {
+        this.upperLeftCorner.translate(dx, dy);
     }
 
 }

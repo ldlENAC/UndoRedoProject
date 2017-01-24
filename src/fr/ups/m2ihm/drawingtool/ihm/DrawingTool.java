@@ -15,6 +15,7 @@ import static fr.ups.m2ihm.drawingtool.model.PaletteEventType.DRAW_LINE;
 import static fr.ups.m2ihm.drawingtool.model.PaletteEventType.DRAW_MACRO;
 import static fr.ups.m2ihm.drawingtool.model.PaletteEventType.DRAW_RECTANGLE;
 import static fr.ups.m2ihm.drawingtool.model.PaletteEventType.DRAW_UNDO_REGIONAL;
+import static fr.ups.m2ihm.drawingtool.model.PaletteEventType.EXEC_MACRO;
 import fr.ups.m2ihm.drawingtool.model.core.Line;
 import fr.ups.m2ihm.drawingtool.model.core.Rectangle;
 import fr.ups.m2ihm.drawingtool.model.core.Shape;
@@ -35,6 +36,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -123,8 +125,11 @@ public class DrawingTool extends javax.swing.JFrame {
             populateHistoryMenu(e);
         });
         
-        model.addPropertyListener(UndoManager.MACRO_PROPERTY, (e) -> { 
+        model.addPropertyListener(UndoManager.MACRO_PROPERTY, (e) -> {             
+            String result = JOptionPane.showInputDialog("Saisissez le nom de la MacroCommande");
+            model.setLastMacroName(result);
             populateMacrosMenu(e);
+            
         });
 
         model.init();
@@ -409,13 +414,14 @@ public class DrawingTool extends javax.swing.JFrame {
                 onItemMacroMenuClicked(e1, index);                
             });
             
-            item.setText(i + " - " + m.toString());
+            item.setText(i + " - " + m.getName());
             MacrosMenu.add(item);      
             
         }
     }
     
-    private void onItemMacroMenuClicked(ActionEvent e, int index){
-        model.executeMacro(index);        
+    private void onItemMacroMenuClicked(ActionEvent e, int index){              
+        PaletteEvent event = new PaletteEvent(EXEC_MACRO, index);
+        model.handleEvent(event);
     }
 }

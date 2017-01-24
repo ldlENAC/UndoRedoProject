@@ -46,7 +46,6 @@ public class UndoManager {
             undo();
         }
     }    
-
     
     private enum PossibleState {
 
@@ -76,7 +75,6 @@ public class UndoManager {
         gotoState(PossibleState.IDLE);
         firePropertyChange(UNDO_COMMANDS_PROPERTY, null, Collections.unmodifiableList(undoableCommands));
         firePropertyChange(REDO_COMMANDS_PROPERTY, null, Collections.unmodifiableList(redoableCommands));
-        firePropertyChange(MACRO_PROPERTY, null, Collections.unmodifiableList(macros));
     }
 
     public UndoManager() {
@@ -297,12 +295,22 @@ public class UndoManager {
             }
         }
         
-        //ArrayList<Macro> oldMacros = new ArrayList<>(macros);
-        macros.add(new Macro(commandsMacro));
-        firePropertyChange(MACRO_PROPERTY, null, macros);        
+        if (!commandsMacro.isEmpty()){
+            macros.add(new Macro(commandsMacro, selection.getUpperLeftCorner()));
+            firePropertyChange(MACRO_PROPERTY, null, macros);        
+        }
     }
     
-    public void executeMacro(int index) {
-        macros.get(index).execute();
+    public void executeMacro(int index, Point source) {
+        macros.get(index).execute(source);
     }    
+    
+    public void setLastMacroName(String result) throws IndexOutOfBoundsException{
+        if (!macros.isEmpty()){
+            macros.get(macros.size()-1).setName(result);
+        }
+        else {
+            throw new IndexOutOfBoundsException("Pas de macro enregistrée");
+        }
+    }
 }

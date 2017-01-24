@@ -15,4 +15,6 @@ public interface DrawingToolModel {
     void removePropertyListener(String propertyName, PropertyChangeListener listener);
     void undoToCommand(int index);
     void executeMacro(int index);
+
+    public void setLastMacroName(String result);
 }

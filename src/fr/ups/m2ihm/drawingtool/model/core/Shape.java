@@ -6,4 +6,5 @@ public interface Shape {
     
     Point getUpperLeftCorner();
     Point getLowerRightCorner();
+    void translate(int dx, int dy);
 }
