@@ -37,13 +37,13 @@ public class Line implements Shape {
         return true;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 13 * hash + (this.source != null ? this.source.hashCode() : 0);
-        hash = 13 * hash + (this.destination != null ? this.destination.hashCode() : 0);
-        return hash;
-    }
+//    @Override
+//    public int hashCode() {
+//        int hash = 7;
+//        hash = 13 * hash + (this.source != null ? this.source.hashCode() : 0);
+//        hash = 13 * hash + (this.destination != null ? this.destination.hashCode() : 0);
+//        return hash;
+//    }
 
     @Override
     public String toString() {
@@ -63,6 +63,7 @@ public class Line implements Shape {
     @Override
     public void translate(int dx, int dy) {
         this.source.translate(dx, dy);
+        this.destination.translate(dx, dy);
     }
 
 

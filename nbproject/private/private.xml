@@ -28,23 +28,6 @@
             <file>file:/D:/Users/David%20Navarre/Documents/NetBeansProjects/Teaching/DrawingTools_Base/src/fr/ups/m2ihm/drawingtool/model/CreateShapeCommand.java</file>
             <file>file:/D:/Users/David%20Navarre/Documents/NetBeansProjects/Teaching/DrawingTools_Base/src/fr/ups/m2ihm/drawingtool/undomanager/UndoManager.java</file>
         </group>
-        <group>
-            <file>file:/C:/Users/Léopold/DrawingTools_Base/src/fr/ups/m2ihm/drawingtool/model/core/Rectangle.java</file>
-            <file>file:/C:/Users/Léopold/DrawingTools_Base/src/fr/ups/m2ihm/drawingtool/model/PaletteEvent.java</file>
-            <file>file:/C:/Users/Léopold/DrawingTools_Base/src/fr/ups/m2ihm/drawingtool/model/LineStateMachine.java</file>
-            <file>file:/C:/Users/Léopold/DrawingTools_Base/src/fr/ups/m2ihm/drawingtool/model/UndoRegionalStateMachine.java</file>
-            <file>file:/C:/Users/Léopold/DrawingTools_Base/src/fr/ups/m2ihm/drawingtool/ihm/DrawingTool.java</file>
-            <file>file:/C:/Users/Léopold/DrawingTools_Base/src/fr/ups/m2ihm/drawingtool/model/PaletteEventType.java</file>
-            <file>file:/C:/Users/Léopold/DrawingTools_Base/src/fr/ups/m2ihm/drawingtool/model/MacroStateMachine.java</file>
-            <file>file:/C:/Users/Léopold/DrawingTools_Base/src/fr/ups/m2ihm/drawingtool/model/DrawingToolModel.java</file>
-            <file>file:/C:/Users/Léopold/DrawingTools_Base/src/fr/ups/m2ihm/drawingtool/model/DefaultDrawingToolModel.java</file>
-            <file>file:/C:/Users/Léopold/DrawingTools_Base/src/fr/ups/m2ihm/drawingtool/undomanager/Macro.java</file>
-            <file>file:/C:/Users/Léopold/DrawingTools_Base/src/fr/ups/m2ihm/drawingtool/undomanager/UndoManager.java</file>
-            <file>file:/C:/Users/Léopold/DrawingTools_Base/src/fr/ups/m2ihm/drawingtool/model/core/Line.java</file>
-            <file>file:/C:/Users/Léopold/DrawingTools_Base/src/fr/ups/m2ihm/drawingtool/model/core/DrawingToolCore.java</file>
-            <file>file:/C:/Users/Léopold/DrawingTools_Base/src/fr/ups/m2ihm/drawingtool/model/core/Shape.java</file>
-            <file>file:/C:/Users/Léopold/DrawingTools_Base/src/fr/ups/m2ihm/drawingtool/undomanager/Command.java</file>
-            <file>file:/C:/Users/Léopold/DrawingTools_Base/src/fr/ups/m2ihm/drawingtool/model/ExecuteMacroStateMachine.java</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>

@@ -38,6 +38,7 @@ public class Macro implements Command {
     public void execute(Point source) {
 //        macro.forEach(command -> command.execute());
         for (Command command : macro){
+            System.out.println("MACRO: Command: " + command.getShape().getClass().getSimpleName() + " \nULC:" + command.getShape().getUpperLeftCorner() + " \nLRC: " + command.getShape().getLowerRightCorner());
             command.getShape().translate(source.x - p0.x, source.y - p0.y);
             command.execute();
         }

@@ -58,6 +58,7 @@ public class Rectangle implements Shape{
     @Override
     public void translate(int dx, int dy) {
         this.upperLeftCorner.translate(dx, dy);
+        this.lowerRightCorner.translate(dx, dy);
     }
 
 }
