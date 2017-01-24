@@ -7,6 +7,7 @@ package fr.ups.m2ihm.drawingtool.undomanager;
 
 import fr.ups.m2ihm.drawingtool.model.core.Shape;
 import java.awt.Point;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,9 +20,16 @@ public class Macro implements Command {
     private Point p0;
 
     public Macro(List<Command> macro, Point p0) {
-        this.macro = macro;
+        this.macro = new ArrayList<>();
+        populateMacro(macro);
         name = null;
         this.p0 = p0; 
+    }
+    
+    private void populateMacro(List<Command> entries){
+        for (Command entry : entries){
+            macro.add(entry.clone());
+        }
     }
 
     public String getName() {
@@ -38,7 +46,7 @@ public class Macro implements Command {
     public void execute(Point source) {
 //        macro.forEach(command -> command.execute());
         for (Command command : macro){
-            System.out.println("MACRO: Command: " + command.getShape().getClass().getSimpleName() + " \nULC:" + command.getShape().getUpperLeftCorner() + " \nLRC: " + command.getShape().getLowerRightCorner());
+            System.out.println("MACRO: Command: " + command.getShape().getClass().getSimpleName() + "\nULC:" + command.getShape().getUpperLeftCorner() + "\nLRC: " + command.getShape().getLowerRightCorner());
             command.getShape().translate(source.x - p0.x, source.y - p0.y);
             command.execute();
         }
@@ -53,5 +61,10 @@ public class Macro implements Command {
     @Override
     public Shape getShape() {
         return null;
+    }
+
+    @Override
+    public Macro clone() {
+        return new Macro(macro, p0);
     }
 }

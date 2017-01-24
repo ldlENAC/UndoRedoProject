@@ -13,7 +13,7 @@ import fr.ups.m2ihm.drawingtool.undomanager.Command;
  *
  * @author David Navarre
  */
-class CreateShapeCommand implements Command {
+class CreateShapeCommand implements Command, Cloneable {
 
     private final DrawingToolCore core;
     private final Shape shape;
@@ -36,6 +36,11 @@ class CreateShapeCommand implements Command {
     @Override
     public Shape getShape() {
         return shape;
+    }
+
+    @Override
+    public CreateShapeCommand clone() {
+        return new CreateShapeCommand(core, shape.clone());
     }
 
 }

@@ -302,7 +302,7 @@ public class UndoManager {
     }
     
     public void executeMacro(int index, Point source) {
-        macros.get(index).execute(source);
+        macros.get(index).clone().execute(source);
     }    
     
     public void setLastMacroName(String result) throws IndexOutOfBoundsException{

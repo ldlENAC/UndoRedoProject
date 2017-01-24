@@ -11,8 +11,9 @@ import fr.ups.m2ihm.drawingtool.model.core.Shape;
  *
  * @author David Navarre
  */
-public interface Command {
+public interface Command{
     void execute();
     void undo();
     Shape getShape();
+    Command clone();
 }
