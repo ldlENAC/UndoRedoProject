@@ -62,8 +62,8 @@ public class Rectangle implements Shape{
     }
 
     @Override
-    public Rectangle clone() {
-        return new Rectangle(upperLeftCorner, lowerRightCorner);
+    public Rectangle clone() {       
+        return new Rectangle((Point)upperLeftCorner.clone(), (Point)lowerRightCorner.clone());
     }
 
 }

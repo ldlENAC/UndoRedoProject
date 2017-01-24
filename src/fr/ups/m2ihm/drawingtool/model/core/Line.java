@@ -68,6 +68,6 @@ public class Line implements Shape {
 
     @Override
     public Line clone() {
-        return new Line(source, destination);
+        return new Line((Point)source.clone(), (Point)destination.clone());
     }
 }
