@@ -18,12 +18,16 @@ public class Macro implements Command {
     private List<Command> macro;
     private String name;
     private Point p0;
+    private Point source;
+    private UndoManager manager;
 
-    public Macro(List<Command> macro, Point p0) {
+    public Macro(List<Command> macro, Point p0, UndoManager manager) {
         this.macro = new ArrayList<>();
         populateMacro(macro);
+        this.manager = manager;
         name = null;
         this.p0 = p0; 
+        this.source = null;
     }
     
     private void populateMacro(List<Command> entries){
@@ -41,20 +45,31 @@ public class Macro implements Command {
     }    
 
     public void execute(){
-        
-    }
-    public void execute(Point source) {
-//        macro.forEach(command -> command.execute());
         for (Command command : macro){
-            System.out.println("MACRO: Command: " + command.getShape().getClass().getSimpleName() + "\nULC:" + command.getShape().getUpperLeftCorner() + "\nLRC: " + command.getShape().getLowerRightCorner());
+            //System.out.println("MACRO: Command: " + command.getShape().getClass().getSimpleName() + "\nULC:" + command.getShape().getUpperLeftCorner() + "\nLRC: " + command.getShape().getLowerRightCorner());
             command.getShape().translate(source.x - p0.x, source.y - p0.y);
-            command.execute();
+            manager.registerCommand(command);
         }
+    }
+//    public void execute(Point source) {
+//        for (Command command : macro){
+//            //System.out.println("MACRO: Command: " + command.getShape().getClass().getSimpleName() + "\nULC:" + command.getShape().getUpperLeftCorner() + "\nLRC: " + command.getShape().getLowerRightCorner());
+//            command.getShape().translate(source.x - p0.x, source.y - p0.y);
+//            manager.registerCommand(command);
+//        }
+//    }
+
+    public void setSource(Point source) {
+        this.source = source;
     }
 
     public void undo() {
-        for (int i=macro.size(); i>0; i--){
-            macro.get(i).undo();
+//        for (int i=macro.size(); i>0; i--){
+//            macro.get(i).undo();
+//        }
+
+        for (Command command : macro){
+            command.undo();
         }
     }    
 
@@ -65,6 +80,6 @@ public class Macro implements Command {
 
     @Override
     public Macro clone() {
-        return new Macro(macro, p0);
+        return new Macro(macro, p0, manager);
     }
 }

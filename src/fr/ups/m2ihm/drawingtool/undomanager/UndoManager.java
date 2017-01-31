@@ -296,13 +296,15 @@ public class UndoManager {
         }
         
         if (!commandsMacro.isEmpty()){
-            macros.add(new Macro(commandsMacro, selection.getUpperLeftCorner()));
+            macros.add(new Macro(commandsMacro, selection.getUpperLeftCorner(), this));
             firePropertyChange(MACRO_PROPERTY, null, macros);        
         }
     }
     
-    public void executeMacro(int index, Point source) {
-        macros.get(index).clone().execute(source);
+    public void registerMacro(int index, Point source) {
+        Macro macro = macros.get(index).clone();
+        macro.setSource(source);
+        registerCommand(macro);
     }    
     
     public void setLastMacroName(String result) throws IndexOutOfBoundsException{

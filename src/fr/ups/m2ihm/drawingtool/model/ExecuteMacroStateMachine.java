@@ -88,7 +88,7 @@ public class ExecuteMacroStateMachine implements DrawingStateMachine{
         switch (currentState) {
             case WAIT_CLICK:       
                 //fireEventAvailabilityChanged(MacroEventType., true);
-                undoManager.executeMacro(index, p0);
+                undoManager.registerMacro(index, p0);
                 firePropertyChange(SHAPES_PROPERTY, null, core.getShapes());
                 model.init();
                 gotoState(PossibleState.MACRO_EXECUTED);
