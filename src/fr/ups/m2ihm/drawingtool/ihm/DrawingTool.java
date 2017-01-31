@@ -27,6 +27,8 @@ import static java.awt.Color.green;
 import static java.awt.Color.pink;
 import static java.awt.Cursor.getDefaultCursor;
 import static java.awt.Cursor.getPredefinedCursor;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import static java.awt.event.KeyEvent.VK_ESCAPE;
@@ -53,6 +55,10 @@ public class DrawingTool extends javax.swing.JFrame {
      */
     public DrawingTool() {
         initComponents();
+        Dimension DimMax = Toolkit.getDefaultToolkit().getScreenSize();
+        setMaximumSize(DimMax);
+
+        setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
         model = new DefaultDrawingToolModel();
 
         model.addPropertyListener(GHOST_PROPERTY, (PropertyChangeEvent evt) -> {
@@ -112,24 +118,26 @@ public class DrawingTool extends javax.swing.JFrame {
         model.addPropertyListener(DRAW_RECTANGLE.getPropertyName(), (PropertyChangeEvent evt) -> {
             btnRectangle.setEnabled((Boolean) evt.getNewValue());
         });
-        
+
         model.addPropertyListener(DRAW_UNDO_REGIONAL.getPropertyName(), (PropertyChangeEvent evt) -> {
             undoRegionalButton.setEnabled((Boolean) evt.getNewValue());
         });
-        
+
         model.addPropertyListener(DRAW_MACRO.getPropertyName(), (PropertyChangeEvent evt) -> {
             btnMacro.setEnabled((Boolean) evt.getNewValue());
         });
         
-        model.addPropertyListener(UndoManager.UNDO_COMMANDS_PROPERTY, (e) -> { 
+        
+
+        model.addPropertyListener(UndoManager.UNDO_COMMANDS_PROPERTY, (e) -> {
             populateHistoryMenu(e);
         });
-        
-        model.addPropertyListener(UndoManager.MACRO_PROPERTY, (e) -> {             
+
+        model.addPropertyListener(UndoManager.MACRO_PROPERTY, (e) -> {
             String result = JOptionPane.showInputDialog("Saisissez le nom de la MacroCommande");
             model.setLastMacroName(result);
             populateMacrosMenu(e);
-            
+
         });
 
         model.init();
@@ -368,59 +376,64 @@ public class DrawingTool extends javax.swing.JFrame {
 
     private void populateHistoryMenu(PropertyChangeEvent e) {
         List<Command> allCommands = new ArrayList<>();
-        if (e.getPropertyName().equals(UndoManager.UNDO_COMMANDS_PROPERTY)){
-            Collection<Command> undoables = (Collection<Command>)e.getNewValue();
-            if (!undoables.isEmpty()){
+        if (e.getPropertyName().equals(UndoManager.UNDO_COMMANDS_PROPERTY)) {
+            Collection<Command> undoables = (Collection<Command>) e.getNewValue();
+            if (!undoables.isEmpty()) {
                 allCommands.addAll(undoables);
             }
         }
-        
+
         historyMenu.removeAll();
-        for (int i = 0; i<allCommands.size(); i++){
+        for (int i = 0; i < allCommands.size(); i++) {
             final int index = i;
             Command c = allCommands.get(i);
             JMenuItem item = new JMenuItem();
             item.addActionListener((ActionEvent e1) -> {
-                onItemHistoryMenuClicked(e1, index);                
+                onItemHistoryMenuClicked(e1, index);
             });
-            
-            item.setText(i + " - Cancel " + c.getShape().getClass().getSimpleName() + " Creation");
+            if (c instanceof Macro) {
+                Macro m = (Macro) c;
+                item.setText(i + " - Cancel Macro " + m.getName());
+            } else {
+                item.setText(i + " - Cancel " + c.getShape().getClass().getSimpleName() + " Creation");
+            }
             historyMenu.add(item);
-            
+
         }
     }
 
-
-    private void onItemHistoryMenuClicked(ActionEvent e, int index){
+    private void onItemHistoryMenuClicked(ActionEvent e, int index) {
         model.undoToCommand(index);
-    };
+    }
+
+    ;
     
-    private void populateMacrosMenu(PropertyChangeEvent e){
+    private void populateMacrosMenu(PropertyChangeEvent e) {
         List<Macro> myMacros;
         myMacros = new ArrayList<>();
-        if (e.getPropertyName().equals(UndoManager.MACRO_PROPERTY)){
-            Collection<Macro> macroArray = (Collection<Macro>)e.getNewValue();
-            if (!macroArray.isEmpty()){
+        if (e.getPropertyName().equals(UndoManager.MACRO_PROPERTY)) {
+            Collection<Macro> macroArray = (Collection<Macro>) e.getNewValue();
+            if (!macroArray.isEmpty()) {
                 myMacros.addAll(macroArray);
             }
         }
-        
+
         MacrosMenu.removeAll();
-        for (int i = 0; i<myMacros.size(); i++){
+        for (int i = 0; i < myMacros.size(); i++) {
             final int index = i;
             Macro m = myMacros.get(i);
             JMenuItem item = new JMenuItem();
             item.addActionListener((ActionEvent e1) -> {
-                onItemMacroMenuClicked(e1, index);                
+                onItemMacroMenuClicked(e1, index);
             });
-            
+
             item.setText(i + " - " + m.getName());
-            MacrosMenu.add(item);      
-            
+            MacrosMenu.add(item);
+
         }
     }
-    
-    private void onItemMacroMenuClicked(ActionEvent e, int index){              
+
+    private void onItemMacroMenuClicked(ActionEvent e, int index) {
         PaletteEvent event = new PaletteEvent(EXEC_MACRO, index);
         model.handleEvent(event);
     }

@@ -42,11 +42,11 @@ public class UndoManager {
 
     public void undoToCommand(int index) {
         int numberOfUndo = undoableCommands.search(undoableCommands.get(index)); // TODO simpler formula
-        for (int i=0; i<numberOfUndo; i++){
+        for (int i = 0; i < numberOfUndo; i++) {
             undo();
         }
-    }    
-    
+    }
+
     private enum PossibleState {
 
         IDLE, UNDO_ONLY, REDO_ONLY, UNDO_REDOABLE
@@ -276,42 +276,46 @@ public class UndoManager {
     }
 
     public void undoRegionalProcess(Rectangle selection) {
-        for (int i=undoableCommands.size()-1; i>=0; i--) {
-            if (isInSelection(undoableCommands.get(i).getShape(), selection)){
-                undoableCommands.get(i).undo();
-                undoableCommands.remove(i);
-                return;
+        for (int i = undoableCommands.size() - 1; i >= 0; i--) {
+            Command command = undoableCommands.get(i);
+            if (!(command instanceof Macro)) {
+                if (isInSelection(undoableCommands.get(i).getShape(), selection)) {
+                    undoableCommands.get(i).undo();
+                    undoableCommands.remove(i);
+                    return;
+                }
             }
         }
     }
-    
+
     public void recordMacro(Rectangle selection) {
         List<Command> commandsMacro = new ArrayList<>();
-        
-        for (int i=0; i<undoableCommands.size(); i++) {
+
+        for (int i = 0; i < undoableCommands.size(); i++) {
             Command command = undoableCommands.get(i);
-            if (isInSelection(command.getShape(), selection)){
-                commandsMacro.add(command);
+            if (!(command instanceof Macro)) {
+                if (isInSelection(command.getShape(), selection)) {
+                    commandsMacro.add(command);
+                }
             }
         }
-        
-        if (!commandsMacro.isEmpty()){
+
+        if (!commandsMacro.isEmpty()) {
             macros.add(new Macro(commandsMacro, selection.getUpperLeftCorner(), this));
-            firePropertyChange(MACRO_PROPERTY, null, macros);        
+            firePropertyChange(MACRO_PROPERTY, null, macros);
         }
     }
-    
+
     public void registerMacro(int index, Point source) {
         Macro macro = macros.get(index).clone();
         macro.setSource(source);
         registerCommand(macro);
-    }    
-    
-    public void setLastMacroName(String result) throws IndexOutOfBoundsException{
-        if (!macros.isEmpty()){
-            macros.get(macros.size()-1).setName(result);
-        }
-        else {
+    }
+
+    public void setLastMacroName(String result) throws IndexOutOfBoundsException {
+        if (!macros.isEmpty()) {
+            macros.get(macros.size() - 1).setName(result);
+        } else {
             throw new IndexOutOfBoundsException("Pas de macro enregistrée");
         }
     }

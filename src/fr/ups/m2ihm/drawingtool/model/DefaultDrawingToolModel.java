@@ -59,7 +59,7 @@ public class DefaultDrawingToolModel implements DrawingToolModel {
         DRAWING_RECTANGLE(true, false, true, true),
         DRAWING_UNDO_REGIONAL(true, true, false, true),
         DRAWING_MACRO(true, true, true, false),
-        EXEC_MACRO(false, false, false, false);
+        EXEC_MACRO(true, true, true, true);
         public final boolean lineEnabled;
         public final boolean rectangleEnabled;
         public final boolean undoRegionalEnabled;
@@ -198,8 +198,7 @@ public class DefaultDrawingToolModel implements DrawingToolModel {
             case DRAW_MACRO:
                 drawMacro();
                 break;
-            case EXEC_MACRO:
-                System.out.println("Exec model handle event");
+            case EXEC_MACRO:                
                 execMacro(event.getMacroIndex());
                 break;
         }

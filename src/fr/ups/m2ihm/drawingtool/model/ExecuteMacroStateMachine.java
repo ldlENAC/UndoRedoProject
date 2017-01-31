@@ -86,11 +86,9 @@ public class ExecuteMacroStateMachine implements DrawingStateMachine{
 
     private void endDraw(DrawingToolCore core) {
         switch (currentState) {
-            case WAIT_CLICK:       
-                //fireEventAvailabilityChanged(MacroEventType., true);
+            case WAIT_CLICK:                       
                 undoManager.registerMacro(index, p0);
-                firePropertyChange(SHAPES_PROPERTY, null, core.getShapes());
-                model.init();
+                firePropertyChange(SHAPES_PROPERTY, null, core.getShapes());                
                 gotoState(PossibleState.MACRO_EXECUTED);
                 break;
             case MACRO_EXECUTED:                
@@ -106,7 +104,7 @@ public class ExecuteMacroStateMachine implements DrawingStateMachine{
 
     private void enableEvents(boolean enableButtons) {
         fireEventAvailabilityChanged(MacroEventType.EXECUTE_MACRO, enableButtons);        
-    }
+    }       
 
     private void fireEventAvailabilityChanged(MacroEventType macroEventType, boolean newAvailability) {
         Boolean oldAvailability = eventAvailability.get(macroEventType);

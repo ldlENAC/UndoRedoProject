@@ -30,6 +30,12 @@ public class Macro implements Command {
         this.source = null;
     }
     
+    public Macro(List<Command> macro, Point p0, UndoManager manager, String name, Point source) {
+        this(macro, p0, manager);
+        this.name = name;
+        this.source = source;
+    }
+    
     private void populateMacro(List<Command> entries){
         for (Command entry : entries){
             macro.add(entry.clone());
@@ -45,29 +51,20 @@ public class Macro implements Command {
     }    
 
     public void execute(){
-        for (Command command : macro){
-            //System.out.println("MACRO: Command: " + command.getShape().getClass().getSimpleName() + "\nULC:" + command.getShape().getUpperLeftCorner() + "\nLRC: " + command.getShape().getLowerRightCorner());
-            command.getShape().translate(source.x - p0.x, source.y - p0.y);
-            manager.registerCommand(command);
+        for (Command command : macro){                                   
+            command.execute();
         }
     }
-//    public void execute(Point source) {
-//        for (Command command : macro){
-//            //System.out.println("MACRO: Command: " + command.getShape().getClass().getSimpleName() + "\nULC:" + command.getShape().getUpperLeftCorner() + "\nLRC: " + command.getShape().getLowerRightCorner());
-//            command.getShape().translate(source.x - p0.x, source.y - p0.y);
-//            manager.registerCommand(command);
-//        }
-//    }
 
     public void setSource(Point source) {
         this.source = source;
+        for (Command command : macro) {
+            if (!(command instanceof Macro))
+                command.getShape().translate(source.x - p0.x, source.y - p0.y);
+        }
     }
 
     public void undo() {
-//        for (int i=macro.size(); i>0; i--){
-//            macro.get(i).undo();
-//        }
-
         for (Command command : macro){
             command.undo();
         }
@@ -80,6 +77,12 @@ public class Macro implements Command {
 
     @Override
     public Macro clone() {
-        return new Macro(macro, p0, manager);
+        if (this.source != null)
+            return new Macro(macro,(Point) p0.clone(), manager, this.name, (Point)this.source.clone());
+        else {
+            Macro m = new Macro(macro, (Point)p0.clone(), manager);
+            m.setName(this.name);
+            return m;
+        }       
     }
 }
